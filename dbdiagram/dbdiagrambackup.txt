@@ -1,0 +1,159 @@
+// Adapted EAV (Entity-Attribute-Value) structure for better query capabilities
+
+Table athletes_notes {
+  id integer [primary key]
+  athlete_id integer
+  desc string
+}
+
+Table athletes {
+  id integer [primary key]
+  name varchar
+  age integer
+  photo string
+  created_at timestamp
+}
+
+Table sports {
+  id integer [primary key]
+  name varchar
+}
+
+Table trainings {
+  id integer [primary key]
+  user_id integer
+  date timestamp
+  notes text
+  model_id integer // Nullable: Predefined model reference
+  sport_id integer
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table training_models {
+  id integer [primary key]
+  name varchar
+  description text
+  sport_id integer
+}
+
+Table training_model_fields {
+  id integer [primary key]
+  training_model_id integer
+  field_name varchar
+  field_type varchar // Ex: 'text', 'number', 'boolean', 'table', etc.
+  default_value varchar [null]
+}
+
+// Campos específicos do atleta, relacionados a um model field.
+// Ex: se algum atleta tiver campos adicionais ou customizados.
+Table training_model_athlete_fields {
+  id integer [primary key]
+  training_model_fields_id integer
+  field_name varchar
+  field_type varchar
+  default_value varchar [null]
+}
+
+Table text_fields {
+  id integer [primary key]
+  training_model_field_id integer [null] // Relacionamento opcional com training_model_fields
+  title varchar
+  mask varchar [null] // Ex: formato de entrada específico (ex: CPF, telefone)
+  required boolean
+  icon varchar [null] // Nome do ícone associado
+  text_color varchar [null] // Cor do texto
+  background_color varchar [null] // Cor de fundo
+  sort_order integer
+}
+
+Table boolean_expansible_fields {
+  id integer [primary key]
+  training_model_field_id integer [null] // Relacionamento opcional com training_model_fields
+  title varchar
+  required boolean
+  icon varchar [null] // Nome do ícone associado
+  text_color varchar [null] // Cor do texto
+  background_color varchar [null] // Cor de fundo
+  sort_order integer
+}
+
+Table single_choice_fields {
+  id                                 integer       [primary key]
+  training_model_field_id            integer       [null] // Pode apontar para training_model_fields
+  title                              varchar
+  required                           boolean
+  icon                               varchar       [null]
+  text_color                         varchar       [null]
+  choice_selected_id integer [null]
+  background_color                   varchar       [null]
+  sort_order                         integer
+}
+
+Ref: single_choice_fields.training_model_field_id > training_model_fields.id
+Ref: single_choice_fields.training_model_field_id > training_model_athlete_fields.id
+Ref: single_choice_fields.training_model_field_id > boolean_expansible_fields.id
+Ref:single_choice_fields.choice_selected_id - single_choice_options.id
+
+Table single_choice_options {
+  id                   integer       [primary key]
+  single_choice_field_id integer
+  label                varchar       // Texto a exibir
+  value                varchar [null] // Valor armazenado (pode ser igual a label ou diferente)
+  sort_order           integer       // Ordem das opções
+}
+Ref: single_choice_options.single_choice_field_id > single_choice_fields.id
+
+Table multiple_choice_fields {
+  id                                 integer       [primary key]
+  training_model_field_id            integer       [null] // Pode apontar para training_model_fields
+  title                              varchar
+  required                           boolean
+  icon                               varchar       [null]
+  text_color                         varchar       [null]
+  background_color                   varchar       [null]
+  sort_order                         integer
+}
+
+Table multiple_choice_options {
+  id                     integer     [primary key]
+  multiple_choice_field_id integer
+  label                  varchar     // Texto a exibir
+  value                  varchar [null] // Valor armazenado
+  sort_order             integer     // Ordem das opções
+}
+
+Ref: multiple_choice_fields.training_model_field_id > training_model_fields.id
+Ref: multiple_choice_fields.training_model_field_id > training_model_athlete_fields.id
+Ref: multiple_choice_options.multiple_choice_field_id > multiple_choice_fields.id
+
+
+// --------------------------------------------------
+// Relacionamentos (refs):
+
+// Cada treinamento pertence a um atleta.
+Ref: trainings.user_id > athletes.id
+
+// Treinamento pode ter um modelo associado (opcional).
+Ref: trainings.model_id > training_models.id
+
+// Treinamento está ligado a um esporte específico.
+Ref: training_models.sport_id > sports.id
+Ref: trainings.sport_id > sports.id
+
+// Notas de atleta vinculadas ao atleta correspondente.
+Ref: athletes_notes.athlete_id > athletes.id
+
+// Campos de um modelo associados ao modelo (1:N).
+Ref: training_model_fields.training_model_id > training_models.id
+
+// Campos customizados de um atleta vinculados aos campos do modelo.
+Ref: training_model_athlete_fields.training_model_fields_id > training_model_fields.id
+
+
+Ref: text_fields.training_model_field_id > training_model_fields.id
+Ref: text_fields.training_model_field_id > training_model_athlete_fields.id
+Ref: text_fields.training_model_field_id > boolean_expansible_fields.id
+
+Ref: boolean_expansible_fields.training_model_field_id > training_model_fields.id
+Ref: boolean_expansible_fields.training_model_field_id > training_model_athlete_fields.id
