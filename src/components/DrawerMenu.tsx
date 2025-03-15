@@ -36,7 +36,7 @@ const DrawerMenu = ({ navigation }: any) => {
 
       <TouchableOpacity
         style={styles.menuItem}
-        onPress={() => alert("Relatórios")}
+        onPress={() => navigation.navigate("Reports")}
       >
         <Text style={styles.menuText}>📊 Relatórios</Text>
       </TouchableOpacity>
