@@ -13,7 +13,7 @@ export default function Layout() {
           }}
         />
         {/* <Drawer.Screen
-          name="user/[id]" 
+          name="user/[id]"
           options={{
             drawerLabel: "User",
             title: "overview",
