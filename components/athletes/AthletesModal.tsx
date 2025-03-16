@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
 import {
   Button,
@@ -9,7 +9,9 @@ import {
   Dialog,
   Paragraph,
   Menu,
+  List,
 } from "react-native-paper";
+import ListAccordion from "react-native-paper/lib/typescript/components/List/ListAccordion";
 
 interface AthletesModalProps {
   isModalVisible: boolean;
@@ -36,6 +38,8 @@ export const AthletesModal = ({
   setDeleteConfirmVisible,
   confirmDelete,
 }: AthletesModalProps) => {
+  const [statusExpanded, setStatusExpanded] = useState(false);
+
   return (
     <>
       <Modal
@@ -88,16 +92,46 @@ export const AthletesModal = ({
         />
         {errors.phone && <HelperText type="error">{errors.phone}</HelperText>}
 
-        <Menu.Item
+        {/* <Menu.Item
           title={
             formValues.status?.charAt(0).toUpperCase() +
               (formValues.status?.slice(1) || "") || "Select Status"
           }
           onPress={() => {
-            /* Show dropdown menu for status */
+            Show dropdown menu for status 
           }}
           style={{ marginTop: 10 }}
-        />
+        /> 
+        */}
+
+        <List.Section style={{ marginTop: 10 }}>
+          <List.Accordion
+            title="Select Status"
+            expanded={statusExpanded}
+            onPress={() => setStatusExpanded(!statusExpanded)}
+          >
+            <List.Item
+              title="Active"
+              onPress={() => handleFormChange("status", "active")}
+              left={(props) => (
+                <List.Icon
+                  {...props}
+                  icon={formValues.status === "active" ? "check" : "cancel"}
+                />
+              )}
+            />
+            <List.Item
+              title="Inactive"
+              onPress={() => handleFormChange("status", "inactive")}
+              left={(props) => (
+                <List.Icon
+                  {...props}
+                  icon={formValues.status === "inactive" ? "check" : "cancel"}
+                />
+              )}
+            />
+          </List.Accordion>
+        </List.Section>
         {errors.status && <HelperText type="error">{errors.status}</HelperText>}
 
         <View
