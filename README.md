@@ -1,4 +1,4 @@
-# Welcome to your Expo app 👋
+# Welcome to AdapTreino app 👋
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
@@ -48,3 +48,8 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+## Other libraries used in this project
+
+- [React Native Paper](https://reactnativepaper.com/): Paper is a collection of customizable and production-ready components for React Native, following Google’s Material Design guidelines.
+- [i18n](https://www.i18next.com/): i18next is an internationalization-framework written in and for JavaScript.
