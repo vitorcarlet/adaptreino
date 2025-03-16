@@ -1,3 +1,5 @@
+import { Athlete } from "@/src/types/types";
+
 export const mockAthletes: Athlete[] = [
   {
     id: "1",
@@ -6,7 +8,7 @@ export const mockAthletes: Athlete[] = [
     email: "john@example.com",
     phone: "(123) 456-7890",
     status: "active",
-  },
+    profileImage: "https://randomuser.me/api/portraits"}, 
   {
     id: "2",
     name: "Jane Smith",

@@ -1,3 +1,4 @@
+import { Athlete } from "@/src/types/types";
 import React, { useState } from "react";
 import { View } from "react-native";
 import {

@@ -1,4 +1,4 @@
-import AthletesCrud from "@/components/athletes/AthletesCrud";
+import AthletesCrud from "@/src/components/@main/athletes/AthletesCrud";
 
 const AthletesPage = () => {
   return (

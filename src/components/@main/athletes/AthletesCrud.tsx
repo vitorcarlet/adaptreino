@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, StyleSheet } from "react-native";
 import {
   Button,
   DataTable,
@@ -18,6 +18,8 @@ import {
 } from "react-native-paper";
 import { mockAthletes } from "./mocks";
 import { AthletesModal } from "./AthletesModal";
+import { Athlete } from "@/src/types/types";
+import { Image } from "expo-image";
 
 const AthletesCrud = () => {
   const [athletes, setAthletes] = useState<Athlete[]>(mockAthletes);
@@ -117,6 +119,7 @@ const AthletesCrud = () => {
 
         <DataTable>
           <DataTable.Header>
+            <DataTable.Title>Photo</DataTable.Title>
             <DataTable.Title>Name</DataTable.Title>
             <DataTable.Title numeric>Age</DataTable.Title>
             <DataTable.Title>Email</DataTable.Title>
@@ -128,6 +131,23 @@ const AthletesCrud = () => {
           <ScrollView>
             {athletes.map((athlete) => (
               <DataTable.Row key={athlete.id}>
+                <DataTable.Cell
+                  style={{
+                    flex: 1,
+                    width: "10%",
+                    padding: 2,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Image
+                    style={styles.image}
+                    source={require("@assets/images/athlete.webp")}
+                    placeholder="test"
+                    contentFit="contain"
+                    transition={1000}
+                  />
+                </DataTable.Cell>
                 <DataTable.Cell>{athlete.name}</DataTable.Cell>
                 <DataTable.Cell numeric>{athlete.age}</DataTable.Cell>
                 <DataTable.Cell>{athlete.email}</DataTable.Cell>
@@ -181,5 +201,23 @@ const AthletesCrud = () => {
     </PaperProvider>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  image: {
+    //flex: 1,
+    padding: 2,
+    width: "50%",
+    maxWidth: 45,
+    height: "100%",
+    borderRadius: 100,
+    backgroundColor: "#0553",
+  },
+});
 
 export default AthletesCrud;

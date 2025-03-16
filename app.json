@@ -38,7 +38,13 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      [
+        "expo-asset",
+        {
+          "assets": ["./assets/images/athlete.webp"]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
