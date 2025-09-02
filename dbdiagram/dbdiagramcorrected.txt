@@ -17,17 +17,6 @@ Table sports {
   name varchar
 }
 
-Table trainings {
-  id integer [primary key]
-  user_id integer
-  date timestamp
-  notes text
-  model_id integer [null] // Modelo pré-definido opcional
-  sport_id integer
-  created_at timestamp
-  updated_at timestamp
-}
-
 Table training_models {
   id integer [primary key]
   name varchar
@@ -38,98 +27,31 @@ Table training_models {
 Table training_model_fields {
   id integer [primary key]
   training_model_id integer
-  field_name varchar
-  field_type varchar // Ex: 'text', 'number', 'boolean', 'table', etc.
-  default_value varchar [null]
-}
-
-// Campos específicos do atleta, relacionados a um model field.
-Table training_model_athlete_fields {
-  id integer [primary key]
-  training_model_fields_id integer
-  field_name varchar
-  field_type varchar
-  default_value varchar [null]
-}
-
-/* 
-   Polymorphic Fields: Agora, essas tabelas podem ser usadas para 
-   armazenar campos de `training_model_fields` ou `training_model_athlete_fields`. 
-   A referência é feita por meio de `entity_id` e `entity_type`
-*/
-
-Table text_fields {
-  id integer [primary key]
-  entity_id integer
-  entity_type varchar  // 'training_model_fields' ou 'training_model_athlete_fields'
-  title varchar
-  mask varchar [null] 
-  required boolean
-  icon varchar [null]
-  text_color varchar [null]
-  background_color varchar [null]
+  schope varchar // dizer se o campo do formulario é do
+  field_name varchar // A descriptive name, e.g., "Heart Rate", "Perceived Exertion"
+  field_type varchar // 'text', 'number', 'boolean', 'single_choice', 'multiple_choice', etc.
   sort_order integer
+  desactivated boolean
+  isChild boolean
+  dadId integer
+  data jsonb
 }
 
-Table boolean_expansible_fields {
+Table trainings {
   id integer [primary key]
-  entity_id integer
-  entity_type varchar  // 'training_model_fields' ou 'training_model_athlete_fields'
-  title varchar
-  required boolean
-  icon varchar [null]
-  text_color varchar [null]
-  background_color varchar [null]
-  sort_order integer
+  user_id integer // Corresponds to an athlete
+  date timestamp
+  notes text      // General notes for the entire training session
+  model_id integer [null]
+  sport_id integer
+  data jsonb [null]
+  created_at timestamp
+  updated_at timestamp
 }
 
-Table single_choice_fields {
-  id integer [primary key]
-  entity_id integer
-  entity_type varchar  // 'training_model_fields' ou 'training_model_athlete_fields'
-  title varchar
-  required boolean
-  icon varchar [null]
-  text_color varchar [null]
-  choice_selected_id integer [null]
-  background_color varchar [null]
-  sort_order integer
-}
-
-Table single_choice_options {
-  id integer [primary key]
-  single_choice_field_id integer
-  label varchar
-  value varchar [null]
-  sort_order integer
-}
-
-Ref: single_choice_options.single_choice_field_id > single_choice_fields.id
-
-Table multiple_choice_fields {
-  id integer [primary key]
-  entity_id integer
-  entity_type varchar  // 'training_model_fields' ou 'training_model_athlete_fields'
-  title varchar
-  required boolean
-  icon varchar [null]
-  text_color varchar [null]
-  background_color varchar [null]
-  sort_order integer
-}
-
-Table multiple_choice_options {
-  id integer [primary key]
-  multiple_choice_field_id integer
-  label varchar
-  value varchar [null]
-  sort_order integer
-}
-
-Ref: multiple_choice_options.multiple_choice_field_id > multiple_choice_fields.id
 
 // --------------------------------------------------
-// Relacionamentos:
+// Relationships:
 
 Ref: trainings.user_id > athletes.id
 Ref: trainings.model_id > training_models.id
@@ -137,4 +59,3 @@ Ref: trainings.sport_id > sports.id
 Ref: training_models.sport_id > sports.id
 Ref: athletes_notes.athlete_id > athletes.id
 Ref: training_model_fields.training_model_id > training_models.id
-Ref: training_model_athlete_fields.training_model_fields_id > training_model_fields.id
